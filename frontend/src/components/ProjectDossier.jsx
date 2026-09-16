@@ -131,6 +131,7 @@ export default function ProjectDossier({
         <p className="text-xs text-slate-500 mb-4">Feature impact on the calculated delay risk score.</p>
         
         <div className="h-44 w-full mb-4">
+          {shapChartData.length > 0 ? (
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={shapChartData} layout="vertical" margin={{ top: 0, right: 20, left: 10, bottom: 0 }}>
               <XAxis type="number" hide domain={['dataMin', 'dataMax']} />
@@ -148,6 +149,15 @@ export default function ProjectDossier({
               </Bar>
             </BarChart>
           </ResponsiveContainer>
+          ) : (
+          <div className="h-full w-full flex items-center justify-center bg-slate-50 dark:bg-slate-900 rounded-lg border border-dashed border-slate-300 dark:border-slate-700">
+            <div className="text-center">
+              <Activity size={24} className="mx-auto mb-2 text-slate-300 dark:text-slate-600" />
+              <p className="text-xs text-slate-400 dark:text-slate-500 font-medium">AI delay drivers are being computed...</p>
+              <p className="text-[10px] text-slate-400 dark:text-slate-600 mt-1">If this persists, the ML model may need retraining.</p>
+            </div>
+          </div>
+          )}
         </div>
 
         <div className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-3">

@@ -54,17 +54,18 @@ def predict_project(project: ProjectCreate):
     else:
         risk_level = "Low"
 
-    # SHAP Explanations — force cast every value to plain float
+    # SHAP Explanations — cloud-hardened with strict float casting
     shap_list = []
     try:
-        explainer = shap.TreeExplainer(clf)
+        explainer = shap.TreeExplainer(clf.get_booster())
         shap_vals = explainer.shap_values(df)[0]
         shap_list = [
-            {"feature": features[i], "impact": float(np.float64(shap_vals[i]))}
+            {"feature": str(features[i]), "impact": float(round(float(np.float64(shap_vals[i])), 6))}
             for i in range(len(features))
         ]
         shap_list = sorted(shap_list, key=lambda x: abs(x["impact"]), reverse=True)[:3]
-    except Exception:
+    except Exception as e:
+        print(f"[LA-EWS] SHAP Error: {e}")
         shap_list = []
 
     # Contextual recommendation
